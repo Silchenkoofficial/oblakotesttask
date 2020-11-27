@@ -1,25 +1,37 @@
-import React, {useState} from 'react'
-import { View, Text, StyleSheet } from 'react-native';
+import React, {useState} from 'react';
+import Axios from 'axios';
+import { View, Text, StyleSheet, CheckBox } from 'react-native';
 import {List, Checkbox} from 'react-native-paper';
+import Swipeable from '../Swipeable/Swipeable';
 
-export default function ListItem({title}) {
+export default function ListItem({todoId, listId, onChecked, title, checked, deleteTodoItem}: any) {
+  const [isChecked, setIsChecked] = useState(checked);
 
-    const [checked, setChecked] = useState(false);
-
-    return (
+  return (
+      <Swipeable deleteTodoItem={() => deleteTodoItem(listId, todoId)}>
         <List.Item
-            title={title}
-            onPress={() => setChecked(!checked)}
-            left={() => <Checkbox
-                status={checked ? 'checked' : 'unchecked'}
-                color="#135FD2" />
-            } />
-    )
+          style={styles.listItem}
+          checked={isChecked}
+          title={title}
+          onPress={() => {
+            setIsChecked(!isChecked);
+            onChecked(listId, todoId, !isChecked);
+          }}
+          left={() => (
+            <Checkbox
+              status={isChecked ? "checked" : "unchecked"}
+              color="#135FD2"
+            />
+          )}
+        />
+      </Swipeable>
+  );
 }
 
 const styles = StyleSheet.create({
-    checkbox: {
-      
-    }
-  });
-  
+  listItem: {
+    backgroundColor: "#ffffff",
+    borderColor: "#e5e5e5",
+    borderRightWidth: 1
+  }
+});
